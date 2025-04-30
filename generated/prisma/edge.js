@@ -125,7 +125,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/heatherdeliso/Documents/Coursework/Bring_it_all_together_backend/generated/prisma",
+      "value": "C:\\coursework\\Unit4assignment\\CapstoneBridge\\Bring_it_all_together_backend\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -134,12 +134,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "windows"
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/heatherdeliso/Documents/Coursework/Bring_it_all_together_backend/prisma/schema.prisma",
+    "sourceFilePath": "C:\\coursework\\Unit4assignment\\CapstoneBridge\\Bring_it_all_together_backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -162,8 +166,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String @id @default(uuid())\n  firstName String\n  lastName  String\n  email     String @unique\n  password  String\n}\n",
-  "inlineSchemaHash": "f13606f8a93b0e4720b159fccead31f028810f717ef3d1c4b0883751ec790ec7",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  binaryTargets = [\"native\", \"windows\"]\n  output        = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String @id @default(uuid())\n  firstName String\n  lastName  String\n  email     String @unique\n  password  String\n}\n",
+  "inlineSchemaHash": "abc1916b8cc95833f1b9a55e8e6b9cbed5a9bd2fe5266933a56d6f62af273a69",
   "copyEngine": true
 }
 config.dirname = '/'
