@@ -189,6 +189,170 @@ const deleteUserById = async (req, res) => {
   }
 };
 
+// const updateUserProfile = async (req, res, next) => {
+//   const { userId } = req.params;
+//   const { firstName, lastName, email, password  } = req.body;
+//   try {
+//     const token = req.headers.authorization?.replace("Bearer ", "");
+//     if (!token)
+//       return res.status(401).json({ message: "Authorization token required" });
+//     const decoded = jwt.verify(token, SECRET);
+//     const authenticatedUserId = decoded.id;
+//     if (authenticatedUserId !== userId) {
+//       return res
+//         .status(403)
+//         .json({ message: "You do not have permission to update this review." });
+//     }
+//     const review = await prisma.review.findUnique({
+//       where: { id: userId },
+//     });
+//     if (!review) {
+//       return res.status(404).json({ message: "Review not found" });
+//     }
+//     if (review.userId !== userId) {
+//       return res.status(403).json({ message: "You do not own this review." });
+//     }
+//     const updatedReview = await prisma.review.update({
+//       where: { id: reviewId },
+//       data: {
+//         rating,
+//         comments: comments
+//           ? {
+//               create: [
+//                 {
+//                   text: comments,
+//                   user: {
+//                     connect: { id: authenticatedUserId },
+//                   },
+//                 },
+//               ],
+//             }
+//           : undefined,
+//       },
+//       include: {
+//         comments: true,
+//       },
+//     });
+
+
+const updateUserProfile = async (req, res, next) => {
+  const { userId } = req.params;
+  const { firstName, lastName, email, password } = req.body;
+
+  try {
+    if (!userId) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "User not found",
+      });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "User not found",
+      });
+    }
+    if (password) {
+      const isPasswordValid = await bcrypt.compare(password, user.password)
+
+    if (!isPasswordValid) {
+        return res.status(401).json ({
+          statusCode: 4401,
+          message: "Login denied"
+        });
+    }
+
+    // Generate new hashed password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          email,
+          password: hashedPassword,
+          profile: {
+            update: {
+              firstName,
+              lastName,
+            },
+          },
+        },
+        include: {
+          profile: true,
+        }
+      });
+
+
+    const token = jwt.sign(
+      { id: user.id, username: user.email },
+      process.env.WEB_TOKEN
+    );
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } = user;
+
+      res.status(200).json({
+        user: userWithoutPassword,
+        token,
+      });
+    }
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        statusCode: 500,
+        message: "Server error",
+    });
+  }
+};
+
+
+
+    // try {
+    // const token = req.headers.authorization?.replace("Bearer ", "");
+//     if (!token)
+//       return res.status(401).json({ message: "Authorization token required" });
+
+//     const decoded = jwt.verify(token, SECRET);
+//     const authenticatedUserId = decoded.id;
+
+//     if (authenticatedUserId !== userId) {
+//       return res
+//         .status(403)
+//         .json({ message: "You do not have permission to update this profile" });
+//     }
+//     const review = await prisma.user.findUnique({
+//       where: { id: userId },
+//     });
+
+//     if (!user) {
+//       return res.status(404).json({ message: "U not found" });
+//     }
+//     if (review.userId !== userId) {
+//       return res.status(403).json({ message: "You do not own this review." });
+//     }
+
+//     const updatedReview = await prisma.review.update({
+//        where: { id: reviewId },
+//        data: {
+//         rating,
+//         comments: {
+//         create: [{ text: comments }],
+//         },
+//       },
+//     });
+//     res.status(200).json(updatedReview);
+//   } catch (error) {
+//     console.error("Error updating review", error);
+//     res.status(500).json({ message: "Server error fetching your reviews" });
+//   }
+// };
+
 module.exports = {
   login,
   register,
@@ -196,4 +360,5 @@ module.exports = {
   getAllUsers,
   getUserById,
   deleteUserById,
+  updateUserProfile,
 };
