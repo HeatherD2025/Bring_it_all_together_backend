@@ -1,5 +1,6 @@
 const { router, bcrypt, prisma, jwt } = require("../common/common");
 require("dotenv").config();
+const { isLoggedIn } = require("../middleware/isLoggedIn");
 
 const getMe = async (req, res) => {
   try {
@@ -127,8 +128,25 @@ const register = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await prisma.user.findMany();
+    if (allUsers.length > 0) {
+      res.send(allUsers);
+    } else {
+      !user;
+      return res.status(404).json({
+        statusCode: 404,
+        message: "No users found.",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 module.exports = {
   login,
   register,
   getMe,
+  getAllUsers,
 };
