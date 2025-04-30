@@ -1,42 +1,42 @@
 const { router, bcrypt, prisma, jwt } = require("../common/common");
 require("dotenv").config();
 
-// const getMe = async (req, res) => {
-//   try {
-//     const tokenWithBearer = req.headers.authorization || "";
-//     const token = tokenWithBearer.split(" ")[1];
-//     console.log(token);
-//     if (!token) {
-//       return res.status(401).json({
-//         statusCode: 401,
-//         message: "Authentication required",
-//       });
-//     }
+const getMe = async (req, res) => {
+  try {
+    const tokenWithBearer = req.headers.authorization || "";
+    const token = tokenWithBearer.split(" ")[1];
+    console.log(token);
+    if (!token) {
+      return res.status(401).json({
+        statusCode: 401,
+        message: "Authentication required",
+      });
+    }
 
-//     const loggedIn = jwt.verify(token, process.env.WEB_TOKEN);
-//     const user = await prisma.user.findUnique({
-//       where: { id: loggedIn.id },
-//     });
+    const loggedIn = jwt.verify(token, process.env.WEB_TOKEN);
+    const user = await prisma.user.findUnique({
+      where: { id: loggedIn.id },
+    });
 
-//     if (!user) {
-//       return res.status(404).json({
-//         statusCode: 404,
-//         message: "User not found",
-//       });
-//     }
+    if (!user) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "User not found",
+      });
+    }
 
-//     const { password: _, ...userWithoutPassword } = user;
+    const { password: _, ...userWithoutPassword } = user;
 
-//     res.status(200).json({
-//       user: userWithoutPassword,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(401).json({
-//       message: "invalid token",
-//     });
-//   }
-// };
+    res.status(200).json({
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({
+      message: "invalid token",
+    });
+  }
+};
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -130,5 +130,5 @@ const register = async (req, res) => {
 module.exports = {
   login,
   register,
-  //   getMe,
+  getMe,
 };

@@ -125,7 +125,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\coursework\\Unit4assignment\\CapstoneBridge\\Bring_it_all_together_backend\\generated\\prisma",
+      "value": "/Users/heatherdeliso/Documents/Coursework/Bring_it_all_together_backend/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -134,7 +134,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin-arm64",
         "native": true
       },
       {
@@ -143,7 +143,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\coursework\\Unit4assignment\\CapstoneBridge\\Bring_it_all_together_backend\\prisma\\schema.prisma",
+    "sourceFilePath": "/Users/heatherdeliso/Documents/Coursework/Bring_it_all_together_backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
