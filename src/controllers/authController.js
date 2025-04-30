@@ -108,13 +108,16 @@ const register = async (req, res) => {
       password: hashedPassword,
     },
   });
+  console.log(registerUser);
   if (registerUser) {
     const token = jwt.sign(
       {
-        id: registerUser.id,
-        email: registerUser.email,
+        // id: registerUser.id,
+        // email: registerUser.email,
+        email,
       },
-      process.env.WEB_TOKEN
+      process.env.WEB_TOKEN,
+      { expiresIn: "24h" }
     );
     const obj = {
       registerUser,

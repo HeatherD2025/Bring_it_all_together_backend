@@ -14,7 +14,7 @@ function middleware(req, res, next) {
 }
 
 // router.post("/login", isLoggedIn, login);
-router.post("/api/register", register);
+router.post("/register", register);
 // router.get("/me", middleware, getMe);
 
 module.exports = router;

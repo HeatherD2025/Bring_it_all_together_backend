@@ -10,7 +10,7 @@ app.use(cors());
 const authRoutes = require("./routes/auth");
 console.log("authRoutes loaded");
 // Backend routes
-app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
 
 // Serves the HTML file that Vite builds
 app.get("/", (req, res) => {
