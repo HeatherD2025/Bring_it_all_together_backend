@@ -144,9 +144,36 @@ const getAllUsers = async (req, res) => {
     console.error(error);
   }
 };
+
+const getUserById = async (req, res) => {
+  const userId = req.params.userid;
+  try {
+    const getUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        firstName: true,
+        lastName: true,
+        email: true,
+      },
+    });
+
+    if (!getUser) {
+      return res.status(404).json({
+        statusCode: 404,
+        message: "User not found. Check userId",
+      });
+    }
+    res.status(200).json(getUser);
+  } catch (error) {
+    console.error(error);
+  }
+};
 module.exports = {
   login,
   register,
   getMe,
   getAllUsers,
+  getUserById,
 };
