@@ -170,10 +170,30 @@ const getUserById = async (req, res) => {
     console.error(error);
   }
 };
+
+const deleteUserById = async (req, res) => {
+  const userId = req.params.userid;
+  try {
+    const deleteUser = await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+    res.status(204).json(deleteUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      statusCode: 500,
+      message: "An error occurred while deleting the user",
+    });
+  }
+};
+
 module.exports = {
   login,
   register,
   getMe,
   getAllUsers,
   getUserById,
+  deleteUserById,
 };
