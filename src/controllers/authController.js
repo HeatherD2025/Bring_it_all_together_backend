@@ -115,7 +115,7 @@ const register = async (req, res) => {
       {
         email,
       },
-      process.env.WEB_TOKEN,
+      process.env.SECRET,
       { expiresIn: "24h" }
     );
     const obj = {
