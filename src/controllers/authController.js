@@ -236,10 +236,11 @@ const deleteUserById = async (req, res) => {
 
 
 const updateUserProfile = async (req, res, next) => {
-  const { userId } = req.params;
+  const objUserId = req.params;
   const { firstName, lastName, email, password } = req.body;
-
+  userId = objUserId.userid;
   try {
+    console.log(userId.userid);
     if (!userId) {
       return res.status(404).json({
         statusCode: 404,
@@ -270,32 +271,23 @@ const updateUserProfile = async (req, res, next) => {
     // Generate new hashed password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-
-
     const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: {
-          email,
+          email: email,
           password: hashedPassword,
-          profile: {
-            update: {
-              firstName,
-              lastName,
-            },
-          },
+          firstName: firstName,
+          lastName: lastName,
         },
-        include: {
-          profile: true,
-        }
       });
 
-
     const token = jwt.sign(
-      { id: user.id, username: user.email },
+      // { id: user.id, username: user.email },
+      { id: updatedUser.id, username: updatedUser.email },
       process.env.WEB_TOKEN
     );
     // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: _, ...userWithoutPassword } = updatedUser;
 
       res.status(200).json({
         user: userWithoutPassword,
