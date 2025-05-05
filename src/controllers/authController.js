@@ -234,13 +234,11 @@ const deleteUserById = async (req, res) => {
 //       },
 //     });
 
-
 const updateUserProfile = async (req, res, next) => {
   const objUserId = req.params;
   const { firstName, lastName, email, password } = req.body;
-  userId = objUserId.userid;
+  const userId = objUserId.userid;
   try {
-    console.log(userId.userid);
     if (!userId) {
       return res.status(404).json({
         statusCode: 404,
@@ -259,19 +257,19 @@ const updateUserProfile = async (req, res, next) => {
       });
     }
     if (password) {
-      const isPasswordValid = await bcrypt.compare(password, user.password)
+      const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-        return res.status(401).json ({
+      if (!isPasswordValid) {
+        return res.status(401).json({
           statusCode: 4401,
-          message: "Login denied"
+          message: "Login denied",
         });
-    }
+      }
 
-    // Generate new hashed password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const updatedUser = await prisma.user.update({
+      // Generate new hashed password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: {
           email: email,
@@ -281,32 +279,30 @@ const updateUserProfile = async (req, res, next) => {
         },
       });
 
-    const token = jwt.sign(
-      // { id: user.id, username: user.email },
-      { id: updatedUser.id, username: updatedUser.email },
-      process.env.WEB_TOKEN
-    );
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = updatedUser;
+      const token = jwt.sign(
+        // { id: user.id, username: user.email },
+        { id: updatedUser.id, username: updatedUser.email },
+        process.env.WEB_TOKEN
+      );
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = updatedUser;
 
       res.status(200).json({
         user: userWithoutPassword,
         token,
       });
     }
-   } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        statusCode: 500,
-        message: "Server error",
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      statusCode: 500,
+      message: "Server error",
     });
   }
 };
 
-
-
-    // try {
-    // const token = req.headers.authorization?.replace("Bearer ", "");
+// try {
+// const token = req.headers.authorization?.replace("Bearer ", "");
 //     if (!token)
 //       return res.status(401).json({ message: "Authorization token required" });
 
